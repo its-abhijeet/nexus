@@ -1,0 +1,10 @@
+[package]
+name = "nexus-common"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+uuid = { workspace = true, features = ["v4", "serde"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
