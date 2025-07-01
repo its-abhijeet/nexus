@@ -19,3 +19,42 @@ pub struct AppendEntriesResponse {
     pub term: Term,    // Current term (may be newer)
     pub success: bool, // True if follower appended entries
 }
+
+/// RequestVote RPC: Candidate → Peer
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RequestVoteRequest {
+    pub term: u64,
+    pub candidate_id: String,
+    pub last_log_index: u64,
+    pub last_log_term: u64,
+}
+
+/// Response to RequestVote
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RequestVoteResponse {
+    pub term: u64,
+    pub vote_granted: bool,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_serialize_append_entries() {
+        let req = AppendEntriesRequest {
+            term: 1,
+            leader_id: "leader1".into(),
+            prev_log_index: 0,
+            prev_log_term: 0,
+            entries: vec![],
+            leader_commit: 0,
+        };
+
+        let encoded = bincode::serialize(&req).unwrap();
+        let decoded: AppendEntriesRequest = bincode::deserialize(&encoded).unwrap();
+
+        assert_eq!(decoded.term, 1);
+        assert_eq!(decoded.leader_id, "leader1");
+    }
+}
