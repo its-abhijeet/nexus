@@ -1,5 +1,5 @@
+use bincode;
 use thiserror::Error;
-
 #[derive(Debug, Error)]
 pub enum NexusError {
     #[error("I/O Error: {0}")]
@@ -16,3 +16,9 @@ pub enum NexusError {
 }
 
 pub type Result<T> = std::result::Result<T, NexusError>;
+
+impl From<bincode::Error> for NexusError {
+    fn from(err: bincode::Error) -> Self {
+        NexusError::Config(format!("Bincode Error: {}", err))
+    }
+}
